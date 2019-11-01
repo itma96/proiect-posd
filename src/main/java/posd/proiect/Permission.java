@@ -13,6 +13,8 @@ public enum Permission {
     CREATE,
     @XmlEnumValue(value = "upload")
     UPLOAD,
+    @XmlEnumValue(value = "download")
+    DOWNLOAD,
     @XmlEnumValue(value = "delete")
     DELETE
 }

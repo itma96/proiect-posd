@@ -23,8 +23,8 @@ public class RolesResource
 
     static
     {
-        roles.put(Role.ADMIN, Arrays.asList(new Permission[] {Permission.VIEW, Permission.CREATE, Permission.DELETE, Permission.UPLOAD}));
-        roles.put(Role.READWRITE, Arrays.asList(new Permission[] {Permission.VIEW, Permission.CREATE, Permission.UPLOAD}));
-        roles.put(Role.READONLY, Arrays.asList(new Permission[] {Permission.VIEW}));
+        roles.put(Role.ADMIN, Arrays.asList(new Permission[] {Permission.VIEW, Permission.CREATE, Permission.DELETE, Permission.UPLOAD, Permission.DOWNLOAD}));
+        roles.put(Role.READWRITE, Arrays.asList(new Permission[] {Permission.VIEW, Permission.CREATE, Permission.UPLOAD, Permission.DOWNLOAD}));
+        roles.put(Role.READONLY, Arrays.asList(new Permission[] {Permission.VIEW, Permission.DOWNLOAD}));
     }
 }
