@@ -7,7 +7,6 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.net.URISyntaxException;
 import java.util.List;
 
 @Component
@@ -48,6 +47,20 @@ public class ServiceEndpoint {
         return Response
                 .status(200)
                 .entity(bucket)
+                .build();
+    }
+
+    @GET
+    @Path("/bucket/new")
+    @Produces("application/json")
+    public Response createBucket(@QueryParam("name") String name) {
+        Bucket newBucket = storageService.createBucket(name);
+        if (newBucket == null) {
+            return Response.status(404).build();
+        }
+        return Response
+                .status(200)
+                .entity(newBucket)
                 .build();
     }
 

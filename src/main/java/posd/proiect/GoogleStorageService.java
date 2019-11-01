@@ -1,11 +1,10 @@
 package posd.proiect;
 
-import com.google.cloud.storage.BlobId;
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
+import com.google.cloud.storage.*;
 import org.springframework.stereotype.Service;
 
 import com.google.auth.oauth2.ServiceAccountCredentials;
-import com.google.cloud.storage.Storage;
-import com.google.cloud.storage.StorageOptions;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
@@ -55,7 +54,12 @@ public class GoogleStorageService {
     }
 
     public Bucket getBucket(String bucketName) {
-        com.google.cloud.storage.Bucket currentBucket = gcs.get(bucketName);
+        com.google.cloud.storage.Bucket currentBucket = null;
+        try {
+            currentBucket = gcs.get(bucketName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (currentBucket != null) {
             Bucket bucket = new Bucket();
             bucket.setName(currentBucket.getName());
@@ -76,8 +80,29 @@ public class GoogleStorageService {
         return null;
     }
 
+    public Bucket createBucket(String bucketName) {
+        com.google.cloud.storage.Bucket newBucket = null;
+        try {
+            newBucket = gcs.create(BucketInfo.newBuilder(bucketName).setStorageClass(StorageClass.STANDARD).setLocation("eu").build());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (newBucket != null) {
+            Bucket bucket = new Bucket();
+            bucket.setName(newBucket.getName());
+            bucket.setBlobs(new ArrayList<>());
+            return bucket;
+        }
+        return null;
+    }
+
     public byte[] getFile(String bucketName, String fileName) {
-        com.google.cloud.storage.Blob currentBlob = gcs.get(BlobId.of(bucketName, fileName));
+        com.google.cloud.storage.Blob currentBlob = null;
+        try {
+            currentBlob = gcs.get(BlobId.of(bucketName, fileName));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         if (currentBlob != null) {
             return currentBlob.getContent();
         }
