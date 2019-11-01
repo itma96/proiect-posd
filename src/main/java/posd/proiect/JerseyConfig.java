@@ -10,5 +10,6 @@ public class JerseyConfig extends ResourceConfig
     {
         register(UsersResource.class);
         register(RolesResource.class);
+        register(ServiceEndpoint.class);
     }
 }
