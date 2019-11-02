@@ -1,12 +1,11 @@
 package posd.proiect;
 
-import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.google.cloud.storage.*;
 import org.springframework.stereotype.Service;
 
-import com.google.auth.oauth2.ServiceAccountCredentials;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ClassPathResource;
+import com.google.auth.oauth2.ServiceAccountCredentials;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,7 +20,10 @@ public class GoogleStorageService {
         Resource apiKey = null;
         try {
             apiKey = new ClassPathResource("my_key.json");
-            gcs = StorageOptions.newBuilder().setCredentials(ServiceAccountCredentials.fromStream(apiKey.getInputStream())).build().getService();
+            gcs = StorageOptions.newBuilder()
+                    .setCredentials(ServiceAccountCredentials.fromStream(apiKey.getInputStream()))
+                    .build()
+                    .getService();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -83,7 +85,10 @@ public class GoogleStorageService {
     public Bucket createBucket(String bucketName) {
         com.google.cloud.storage.Bucket newBucket = null;
         try {
-            newBucket = gcs.create(BucketInfo.newBuilder(bucketName).setStorageClass(StorageClass.STANDARD).setLocation("eu").build());
+            newBucket = gcs.create(BucketInfo.newBuilder(bucketName)
+                    .setStorageClass(StorageClass.STANDARD)
+                    .setLocation("eu")
+                    .build());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -96,7 +101,15 @@ public class GoogleStorageService {
         return null;
     }
 
-    public byte[] getFile(String bucketName, String fileName) {
+    public void deleteBucket(String bucketName) {
+        try {
+            gcs.delete(bucketName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public byte[] downloadFile(String bucketName, String fileName) {
         com.google.cloud.storage.Blob currentBlob = null;
         try {
             currentBlob = gcs.get(BlobId.of(bucketName, fileName));
@@ -105,6 +118,28 @@ public class GoogleStorageService {
         }
         if (currentBlob != null) {
             return currentBlob.getContent();
+        }
+        return null;
+    }
+
+    public Blob uploadFile(String bucketName, String fileName, byte[] bytes) {
+        BlobId blobId = BlobId.of(bucketName, fileName);
+        BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
+        com.google.cloud.storage.Blob blob = null;
+        try {
+            blob = gcs.create(blobInfo, bytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (blob != null) {
+            Blob b = new Blob();
+            b.setId(blob.getGeneratedId());
+            b.setName(blob.getName());
+            b.setContentType(blob.getContentType());
+            b.setHash(blob.getMd5ToHexString());
+            b.setSize(blob.getSize());
+            b.setCreationTime(blob.getCreateTime());
+            return b;
         }
         return null;
     }
