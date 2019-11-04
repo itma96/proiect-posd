@@ -13,11 +13,8 @@ public class User implements Serializable {
     @XmlAttribute(name = "id")
     private int id;
 
-    @XmlElement(name = "firstName")
-    private String firstName;
-
-    @XmlElement(name = "lastName")
-    private String lastName;
+    @XmlElement(name = "userName")
+    private String userName;
 
     private String password;
 
@@ -32,20 +29,12 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPassword() {

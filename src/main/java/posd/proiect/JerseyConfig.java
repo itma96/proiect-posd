@@ -10,6 +10,7 @@ public class JerseyConfig extends ResourceConfig
     public JerseyConfig()
     {
         register(MultiPartFeature.class);
+        register(AuthorizationFilter.class);
         register(UsersResource.class);
         register(RolesResource.class);
         register(ServiceEndpoint.class);

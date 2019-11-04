@@ -26,15 +26,13 @@ public class UsersResource
     {
         User user1 = new User();
         user1.setId(1);
-        user1.setFirstName("John");
-        user1.setLastName("Wick");
+        user1.setUserName("John_Wick");
         user1.setPassword("1234");
         user1.setRoles(Arrays.asList(new Role[] {Role.ADMIN}));
 
         User user2 = new User();
         user2.setId(2);
-        user2.setFirstName("Harry");
-        user2.setLastName("Potter");
+        user2.setUserName("John_Snow");
         user2.setPassword("1234");
         user2.setRoles(Arrays.asList(new Role[] {Role.READONLY}));
 
